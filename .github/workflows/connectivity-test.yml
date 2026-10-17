@@ -1,0 +1,41 @@
+name: TFDA connectivity test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner IP
+        run: curl -s https://api.ipify.org; echo
+
+      - name: Test endpoints
+        run: |
+          urls=(
+            "https://data.fda.gov.tw/swagger-ui/index.html"
+            "https://data.fda.gov.tw/v3/api-docs"
+            "https://data.fda.gov.tw/v2/api-docs"
+            "https://data.fda.gov.tw/frontsite/data/DataAction.do?method=doDetail&infoId=37"
+            "https://data.gov.tw/dataset/9123"
+            "https://info.nhi.gov.tw/"
+          )
+          for u in "${urls[@]}"; do
+            r=$(curl -sS -L -o /tmp/body -w '%{http_code} %{size_download}B %{time_total}s %{content_type}' \
+                --max-time 60 -A "Mozilla/5.0 CareAlong-ConnTest" "$u" 2>&1) || r="FAIL $r"
+            echo "$r  <- $u"
+            head -c 300 /tmp/body | tr -d '\n'; echo; echo "---"
+          done
+
+      - name: Save api-docs
+        if: always()
+        run: |
+          curl -sS -L --max-time 60 -o api-docs.json https://data.fda.gov.tw/v3/api-docs || true
+          ls -l api-docs.json || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-docs
+          path: api-docs.json
+          if-no-files-found: ignore
