@@ -3,15 +3,21 @@ name: TFDA connectivity test
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Runner IP
-        run: curl -s https://api.ipify.org; echo
+      - uses: actions/checkout@v4
 
       - name: Test endpoints
         run: |
+          mkdir -p results
+          out=results/connectivity.txt
+          echo "Runner IP: $(curl -s https://api.ipify.org)" > $out
+          echo "Time: $(date -u +%FT%TZ)" >> $out
           urls=(
             "https://data.fda.gov.tw/swagger-ui/index.html"
             "https://data.fda.gov.tw/v3/api-docs"
@@ -23,19 +29,15 @@ jobs:
           for u in "${urls[@]}"; do
             r=$(curl -sS -L -o /tmp/body -w '%{http_code} %{size_download}B %{time_total}s %{content_type}' \
                 --max-time 60 -A "Mozilla/5.0 CareAlong-ConnTest" "$u" 2>&1) || r="FAIL $r"
-            echo "$r  <- $u"
-            head -c 300 /tmp/body | tr -d '\n'; echo; echo "---"
+            { echo "$r  <- $u"; head -c 300 /tmp/body | tr -d '\n'; echo; echo "---"; } >> $out
           done
+          curl -sS -L --max-time 60 -o results/api-docs.json https://data.fda.gov.tw/v3/api-docs || true
+          cat $out
 
-      - name: Save api-docs
-        if: always()
+      - name: Commit results
         run: |
-          curl -sS -L --max-time 60 -o api-docs.json https://data.fda.gov.tw/v3/api-docs || true
-          ls -l api-docs.json || true
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: api-docs
-          path: api-docs.json
-          if-no-files-found: ignore
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add results
+          git commit -m "Connectivity test results" || exit 0
+          git push
