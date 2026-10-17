@@ -12,32 +12,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Test endpoints
+      - name: Download test
         run: |
-          mkdir -p results
-          out=results/connectivity.txt
-          echo "Runner IP: $(curl -s https://api.ipify.org)" > $out
-          echo "Time: $(date -u +%FT%TZ)" >> $out
-          urls=(
-            "https://data.fda.gov.tw/swagger-ui/index.html"
-            "https://data.fda.gov.tw/v3/api-docs"
-            "https://data.fda.gov.tw/v2/api-docs"
-            "https://data.fda.gov.tw/frontsite/data/DataAction.do?method=doDetail&infoId=37"
-            "https://data.gov.tw/dataset/9123"
-            "https://info.nhi.gov.tw/"
-          )
-          for u in "${urls[@]}"; do
-            r=$(curl -sS -L -o /tmp/body -w '%{http_code} %{size_download}B %{time_total}s %{content_type}' \
-                --max-time 60 -A "Mozilla/5.0 CareAlong-ConnTest" "$u" 2>&1) || r="FAIL $r"
-            { echo "$r  <- $u"; head -c 300 /tmp/body | tr -d '\n'; echo; echo "---"; } >> $out
+          mkdir -p results dl
+          out=results/download.txt
+          echo "Runner IP: $(curl -s https://api.ipify.org)  Time: $(date -u +%FT%TZ)" > $out
+          UA="Mozilla/5.0 CareAlong-ConnTest"
+          # swagger config
+          curl -sSL -A "$UA" https://data.fda.gov.tw/swagger-ui/swagger-initializer.js -o results/swagger-initializer.js || true
+          # dataset metadata from data.gov.tw API
+          for id in 9123 9122; do
+            curl -sSL -A "$UA" "https://data.gov.tw/api/v2/rest/dataset/$id" -o results/dataset-$id.json || true
+            echo "dataset $id meta: $(wc -c < results/dataset-$id.json)B" >> $out
           done
-          curl -sS -L --max-time 60 -o results/api-docs.json https://data.fda.gov.tw/v3/api-docs || true
+          # extract download URLs and try each
+          for u in $(grep -oE '"resourceDownloadUrl"\s*:\s*"[^"]+"' results/dataset-9123.json | sed -E 's/.*"([^"]+)"$/\1/' | sed 's#\\/#/#g' | sort -u); do
+            r=$(curl -sS -L -o dl/file -w '%{http_code} %{size_download}B %{time_total}s %{content_type}' --max-time 300 -A "$UA" "$u" 2>&1) || r="FAIL $r"
+            echo "$r  <- $u" >> $out
+            file dl/file >> $out
+            if unzip -l dl/file >/dev/null 2>&1; then unzip -l dl/file | head -10 >> $out; unzip -o -q dl/file -d dl/x && for f in dl/x/*; do echo "== $f ($(wc -c <"$f")B)" >> $out; head -c 1500 "$f" >> $out; echo >> $out; done; fi
+            rm -rf dl/file dl/x
+            echo "---" >> $out
+          done
           cat $out
 
       - name: Commit results
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
+          git pull -q
           git add results
-          git commit -m "Connectivity test results" || exit 0
+          git commit -m "Download test results" || exit 0
           git push
