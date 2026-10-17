@@ -1,0 +1,20 @@
+Runner IP: 20.119.103.52
+Time: 2026-10-17T11:57:18Z
+200 734B 1.315291s text/html  <- https://data.fda.gov.tw/swagger-ui/index.html
+<!-- HTML for static distribution bundle build --><!DOCTYPE html><html lang="en">  <head>    <meta charset="UTF-8">    <title>Swagger UI</title>    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />    <link rel="stylesheet" type="text/css" href="index.css" />    <link rel="ic
+---
+404 2369B 0.916317s text/html  <- https://data.fda.gov.tw/v3/api-docs
+<!DOCTYPE html><html lang="zh-Hant-TW"><head>    <meta charset="utf-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">    <!-- Favicon icon -->    <link rel="icon" typ
+---
+404 2369B 1.315301s text/html  <- https://data.fda.gov.tw/v2/api-docs
+<!DOCTYPE html><html lang="zh-Hant-TW"><head>    <meta charset="utf-8">    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">    <!-- Favicon icon -->    <link rel="icon" typ
+---
+200 734B 1.519712s text/html  <- https://data.fda.gov.tw/frontsite/data/DataAction.do?method=doDetail&infoId=37
+<!-- HTML for static distribution bundle build --><!DOCTYPE html><html lang="en">  <head>    <meta charset="UTF-8">    <title>Swagger UI</title>    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />    <link rel="stylesheet" type="text/css" href="index.css" />    <link rel="ic
+---
+200 542126B 1.133068s text/html;charset=utf-8  <- https://data.gov.tw/dataset/9123
+<!DOCTYPE html><html  lang="zh-Hant-TW" dir="ltr" class="" style="" aria-live="polite"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>未註銷藥品許可證資料集 ｜ 政府資料開放平臺</title><style>@import"https://fonts.googleap
+---
+200 175B 1.440759s text/html  <- https://info.nhi.gov.tw/
+<!DOCTYPE html><html lang=""><head></head><body>    <script type="text/Javascript">    window.location.href = "/INAE0000/INAE0002S01";    </script></body></html>
+---

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/asset/img/favicon.ico">
+    <title>TFDA 衛生福利部食品藥物管理署 食品藥物開放資料平臺</title>
+    <link href="/error/asset/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/error/asset/bootstrap/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="/error/asset/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="/error/asset/css/login.css">
+
+</head>
+
+<body>
+    <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="active item"></div>
+
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+
+            <div class="offset-md-2 col-md-8">
+
+                <div class="panel-default errorlogo">
+                    <div class="col-12 text-center">
+                        <a href="####"><img src="/error/asset/img/logo.png" alt="食品藥物開放資料平臺" /></a>
+                    </div>
+
+                    <p class="error404 text-center my-2">
+                        404
+                    </p>
+
+
+                    <p class="fs-5 mb-0 text-center">很抱歉！您所瀏覽的頁面不存在。</p>
+
+                    <p class="fs-5 text-center">Oops! the page was not found. </p>
+
+                </div>
+            </div>
+            <footer class="text-center mt-5">
+                <p class="mb-0">copyright © 2025 衛生福利部食品藥物管理署 食品藥物開放資料平臺</p>
+                <p>All rights reserved.</p>
+            </footer>
+        </div>
+       
+    </div>
+
+
+
+    </div>
+
+
+    <script src="/error/asset/js/jquery-3.7.1.min.js"></script>
+    <script src="/error/asset/js/bootstrap.min.js"></script>
+    <!-- <script src="/error/asset/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="/error/asset/js/popper.min.js"></script>
+  <script>
+    $('.carousel').carousel();
+  </script> -->
+
+</body>
+
+</html>
